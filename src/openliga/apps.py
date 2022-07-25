@@ -2,5 +2,5 @@ from django.apps import AppConfig
 
 
 class OpenligaConfig(AppConfig):
-    default_auto_field = 'django.db.models.BigAutoField'
-    name = 'openliga'
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "openliga"

@@ -2,11 +2,18 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
+from pathlib import Path
 
 
 def main():
     """Run administrative tasks."""
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
+    if sys.argv[1] == "test":
+        os.environ["TEST_DB"] = "test"
+        print("NOTE: Running BLACK formation:")
+        BASE_DIR = Path(__file__).resolve().parent.parent
+        print(os.popen(f"black --config {BASE_DIR}/.black.toml .").read())
+        print(os.popen("isort .").read())
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
@@ -18,5 +25,5 @@ def main():
     execute_from_command_line(sys.argv)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
