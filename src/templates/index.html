@@ -113,7 +113,7 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
-                        <h1 class="mt-4">Bundesliga Stats</h1>
+                        <h1 class="mt-4"><img style="width: 4%; height:auto" alt="bl_logo" src="{% static "images/bundesliga_logo.png" %}"> Bundesliga Stats </h1>
                         <ol class="breadcrumb mb-4">
                             <li class="breadcrumb-item active">Dashboard</li>
                         </ol>
@@ -160,18 +160,48 @@
                                 <div class="card mb-4">
                                     <div class="card-header">
                                         <i class="fas fa-chart-area me-1"></i>
-                                        Area Chart Example
+                                        Matches Played
                                     </div>
-                                    <div class="card-body"><canvas id="myAreaChart" width="100%" height="40"></canvas></div>
+                                    <div class="card-body">
+                                        <table id="example" class="display compact" style="width:100%">
+                                            <thead>
+                                                <tr>
+                                                    <th>Team 1</th>
+                                                    <th>Score1</th>
+                                                    <th>Score2</th>
+                                                    <th>Team 2</th>
+                                                    <th>Date</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for match in matches_bl2 %}
+                                                    {% if match.matchIsFinished == True %}
+                                                        <tr>
+                                                            <td><img alt="team_ico" src="{{ match.team1.teamIconUrl }}" width="20px" height="20px"> {{ match.team1.teamName }} </td>
+                                                            {% for result in match.matchResults %}
+                                                                {% if result.resultTypeID == 2 %}
+                                                                    <td style="text-align:center">{{ result.pointsTeam1 }}</td>
+                                                                    <td style="text-align:center">{{ result.pointsTeam2 }}</td>
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                            <td><img alt="team_ico" src="{{ match.team2.teamIconUrl }}" width="20px" height="20px"> {{ match.team2.teamName }}</td>
+                                                            <td>{{ match.matchDateTimeUTC }}</td>
+                                                        </tr>
+                                                    {% endif %}
+                                                {% endfor %}
+
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-xl-6">
                                 <div class="card mb-4">
                                     <div class="card-header">
-                                        <i class="fas fa-chart-bar me-1"></i>
-                                        Bar Chart Example
+                                        <i class="fas fa-chart-area me-1"></i>
+                                        Upcoming Matches
                                     </div>
-                                    <div class="card-body"><canvas id="myBarChart" width="100%" height="40"></canvas></div>
+
                                 </div>
                             </div>
                         </div>
@@ -206,7 +236,7 @@
                                         {% for team in bl1 %}
                                         <tr>
                                             <td>{{ team.teamName }} <img src="{{  team.teamIconUrl }}" alt="team_logo" width="20px" height="20px"></td>
-                                            <td>1st BundesLiga</td>
+                                            <td>1st Bundesliga</td>
                                             <td>{{ team.points }}</td>
                                             <td>{{ team.matches }}</td>
                                             <td>{{ team.won }}</td>
@@ -217,6 +247,16 @@
                                         <tr>
                                             <td>{{ team.teamName }}</td>
                                             <td>2nd BundesLiga</td>
+                                            <td>{{ team.points }}</td>
+                                            <td>{{ team.matches }}</td>
+                                            <td>{{ team.won }}</td>
+                                            <td>{{ team.lost }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                        {% for team in bl3 %}
+                                        <tr>
+                                            <td>{{ team.teamName }}</td>
+                                            <td>3. Liga</td>
                                             <td>{{ team.points }}</td>
                                             <td>{{ team.matches }}</td>
                                             <td>{{ team.won }}</td>
