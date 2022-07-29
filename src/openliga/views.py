@@ -57,7 +57,8 @@ class IndexView(ListView):
         r = requests.get(self.path_matches.format(league, season))
         return r.json()
 
-    def get_today_matches(self, matches_data):
+    @staticmethod
+    def get_today_matches(matches_data):
         # DO NOT FORGET TO CHANGE TODAY VARIABLE!!!
         today_matches = []
         # today = '2022-08-05T16:30:00'
@@ -67,7 +68,8 @@ class IndexView(ListView):
                 today_matches.append(match)
         return today_matches
 
-    def get_next_day_matches(self, matches_data):
+    @staticmethod
+    def get_next_day_matches(matches_data):
         next_day_matches = []
         for i in range(len(matches_data) - 1):
             if matches_data[i]["matchDateTime"].date() > TODAY:
@@ -78,5 +80,6 @@ class IndexView(ListView):
                     next_day_matches.append(matches_data[i])
         return next_day_matches
 
-    def get_next_gameday_date(self, next_day_matches):
+    @staticmethod
+    def get_next_gameday_date(next_day_matches):
         return next_day_matches[0]["matchDateTime"]

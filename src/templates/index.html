@@ -27,13 +27,13 @@
                     <div class="container-fluid px-5">
                         <h1 class="mt-4"><img style="width: 4%; height:auto" alt="bl_logo" src="{% static "images/bundesliga_logo.png" %}"> Bundesliga Stats </h1>
                         <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item active">Dashboard</li>
+                            <li class="breadcrumb-item active" style="color: black">Today: {% now 'Y-F-d' %}</li>
                         </ol>
                         <div class="row">
-                            <!-- Start of matchday cards -->
-                            <div class="col-xl-3 col-md-6">
-                                <div class="card bg-primary text-white mb-4">
-                                    <div class="card-body">Today matches {% now 'Y-M-d' %}</div>
+                            <!-- Start of Gameday cards -->
+                            <div class="col-xl-3 col-md-6 d-inline-flex">
+                                <div class="card bg-primary text-white mb-4 ">
+                                    <div class="card-body">Today matches</div>
                                     <div class="card-footer d-flex align-items-center justify-content-between">
                                         <table class="table">
                                             <tbody>
@@ -48,20 +48,19 @@
                                                 {% endfor %}
                                             </tbody>
                                         </table>
-
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xl-3 col-md-6">
-                                <div class="card bg-warning text-white mb-4">
-                                    <div class="card-body">Following Gameday {{ next_day_matches_date|date:"Y-M-d"}}</div>
+                            <div class="col-xl-3 col-md-6 d-inline-flex">
+                                <div class="card bg-warning text-black mb-4">
+                                    <div class="card-body">The Following Gameday : {{ next_day_matches_date|date:"Y-M-d"}}</div>
                                     <div class="card-footer d-flex align-items-center justify-content-between">
                                         <table class="table">
                                             <tbody>
                                                 {% for match in next_day_matches %}
                                                     <tr>
                                                         <td><img alt="team_ico" src="{{ match.team1.teamIconUrl }}" width="20px" height="20px"> {{ match.team1.shortName }}</td>
-                                                        <td><img alt="team_ico" src="{{ match.team2.teamIconUrl }}" width="20px" height="20px"> {{ match.team2.shortName }}</td>
+                                                        <td><img  alt="team_ico" src="{{ match.team2.teamIconUrl }}" width="20px" height="20px"> {{ match.team2.shortName }}</td>
                                                         <td>{{ match.matchDateTime|time:"H:i" }} LT</td>
                                                     </tr>
                                                 {% empty %}
@@ -72,7 +71,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- End of matchday cards -->
+                            <!-- End of Gameday cards -->
                         </div>
                         <div class="row">
                             <div class="col-xl-6">
@@ -104,8 +103,8 @@
                                                                     <td style="text-align:center">{{ result.pointsTeam2 }}</td>
                                                                 {% endif %}
                                                             {% endfor %}
-                                                            <td><img alt="team_ico" src="{{ match.team2.teamIconUrl }}" width="20px" height="20px"> {{ match.team2.teamName }}</td>
-                                                            <td>{{ match.matchDateTimeUTC }}</td>
+                                                            <td><img alt="team_ico" src="{{ match.team2.teamIconUrl }}" width="20px" height="20px"> {{ match.team2.teamName }} </td>
+                                                            <td>{{ match.matchDateTime|date:"y-m-d"}}</td>
                                                         </tr>
                                                     {% endif %}
                                                 {% endfor %}
@@ -141,8 +140,8 @@
                                                                     <td style="text-align:center">{{ result.pointsTeam2 }}</td>
                                                                 {% endif %}
                                                             {% endfor %}
-                                                            <td><img alt="team_ico" src="{{ match.team2.teamIconUrl }}" width="20px" height="20px"> {{ match.team2.teamName }}</td>
-                                                            <td>{{ match.matchDateTimeUTC }}</td>
+                                                            <td><img alt="team_ico" src="{{ match.team2.teamIconUrl }}" width="20px" height="20px"> {{ match.team2.teamName }} </td>
+                                                            <td>{{ match.matchDateTime|date:"Y-m-d"}}</td>
                                                         </tr>
                                                     {% endif %}
                                                 {% endfor %}
@@ -179,7 +178,7 @@
                                                                 {% endif %}
                                                             {% endfor %}
                                                             <td><img alt="team_ico" src="{{ match.team2.teamIconUrl }}" width="20px" height="20px"> {{ match.team2.teamName }}</td>
-                                                            <td>{{ match.matchDateTimeUTC }}</td>
+                                                            <td>{{ match.matchDateTime|date:"Y-m-d"}}</td>
                                                         </tr>
                                                     {% endif %}
                                                 {% endfor %}
@@ -187,14 +186,15 @@
                                         </table>
                                     </div>
                                 </div>
-                                <!-- End of Played games tables -->
                             </div>
+                         <!-- End of Played games tables -->
+
+                            <!-- Start games to be played-->
                             <div class="col-xl-6">
-                                <!-- Start games to be played-->
                                 <div class="card mb-4">
                                     <div class="card-header">
                                         <i class="fas fa-chart-area me-1"></i>
-                                        Upcoming Matches
+                                        Upcoming Matches (All Bundesliga divisions)
                                     </div>
                                     <div class="card-body">
                                         <table id="bl1_future" class="display compact" style="width:100%">
@@ -202,7 +202,7 @@
                                                 <tr>
                                                     <th>Team 1</th>
                                                     <th>Team 2</th>
-                                                    <th>League</th>
+{#                                                    <th>League</th>#}
                                                     <th>Date</th>
                                                 </tr>
                                             </thead>
@@ -212,8 +212,8 @@
                                                         <tr>
                                                             <td><img alt="team_ico" src="{{ match.team1.teamIconUrl }}" width="20px" height="20px"> {{ match.team1.teamName }} </td>
                                                             <td><img alt="team_ico" src="{{ match.team2.teamIconUrl }}" width="20px" height="20px"> {{ match.team2.teamName }}</td>
-                                                            <td>{{ match.leagueShortcut }}</td>
-                                                            <td>{{ match.matchDateTimeUTC }}</td>
+{#                                                            <td>{{ match.leagueShortcut }}</td>#}
+                                                            <td>{{ match.matchDateTime|date:"Y-m-d H:i"}}</td>
                                                         </tr>
                                                     {% endif %}
                                                 {% endfor %}
