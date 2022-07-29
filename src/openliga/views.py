@@ -1,7 +1,4 @@
 import requests
-from django.core.paginator import Paginator
-from django.http import HttpResponse
-from django.shortcuts import render
 
 # Create your views here.
 from datetime import datetime
@@ -22,26 +19,34 @@ class IndexView(ListView):
 
     @staticmethod
     def sort_func(unsorted_data):
-        return unsorted_data['matchDateTimeUTC']
+        return unsorted_data["matchDateTime"]
 
     def get_queryset(self):
+        """
+        Collects data of all matches for current season
+        for all BL leagues in sorted by date order
+        """
         queryset = []
         for league in self.leagues_shortcuts:
             matches = self.get_matches_data(league, CURRENT_SEASON)
             for match in matches:
+                match["matchDateTime"] = datetime.fromisoformat(match["matchDateTime"])
                 queryset.append(match)
         queryset.sort(key=self.sort_func)
         return queryset
 
     def get_teams_stats(self):
-        teams_stats = {league: self.get_leagues_data(league, CURRENT_SEASON) for league in self.leagues_shortcuts }
+        teams_stats = {league: self.get_leagues_data(league, CURRENT_SEASON) for league in self.leagues_shortcuts}
         return teams_stats
 
     def get_context_data(self, **kwargs):
         kwargs["teams_stats"] = self.get_teams_stats()
         kwargs["matches"] = self.get_queryset()
         kwargs["today_matches"] = self.get_today_matches(kwargs["matches"])
-        print(kwargs["today_matches"])
+        kwargs["next_day_matches"] = self.get_next_day_matches(kwargs["matches"])
+        kwargs["next_day_matches_date"] = self.get_next_gameday_date(kwargs["next_day_matches"])
+        # print(kwargs["next_day_matches"])
+        # print(kwargs["matches"][0])
         return kwargs
 
     def get_leagues_data(self, league, season):
@@ -55,14 +60,23 @@ class IndexView(ListView):
     def get_today_matches(self, matches_data):
         # DO NOT FORGET TO CHANGE TODAY VARIABLE!!!
         today_matches = []
-        today = '2022-08-05T16:30:00'
-        today = datetime.fromisoformat(today).date()
+        # today = '2022-08-05T16:30:00'
+        # today = datetime.fromisoformat(today).date()
         for match in matches_data:
-            match['matchDateTime'] = datetime.fromisoformat(match['matchDateTime'])
-            if match['matchDateTime'].date() == today:
+            if match["matchDateTime"].date() == TODAY:
                 today_matches.append(match)
         return today_matches
 
+    def get_next_day_matches(self, matches_data):
+        next_day_matches = []
+        for i in range(len(matches_data) - 1):
+            if matches_data[i]["matchDateTime"].date() > TODAY:
+                if matches_data[i + 1]["matchDateTime"].day > matches_data[i]["matchDateTime"].day:
+                    next_day_matches.append(matches_data[i])
+                    break
+                else:
+                    next_day_matches.append(matches_data[i])
+        return next_day_matches
 
-
-
+    def get_next_gameday_date(self, next_day_matches):
+        return next_day_matches[0]["matchDateTime"]

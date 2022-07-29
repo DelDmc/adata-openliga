@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 {% load static %}
-{% load openliga_extras %}
 <html lang="en">
     <head>
         <meta charset="utf-8" />
@@ -36,14 +35,16 @@
                                 <div class="card bg-primary text-white mb-4">
                                     <div class="card-body">Today matches {% now 'Y-M-d' %}</div>
                                     <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <table>
+                                        <table class="table">
                                             <tbody>
                                                 {% for match in today_matches %}
                                                     <tr>
                                                         <td><img alt="team_ico" src="{{ match.team1.teamIconUrl }}" width="20px" height="20px"> {{ match.team1.shortName }}</td>
                                                         <td><img alt="team_ico" src="{{ match.team2.teamIconUrl }}" width="20px" height="20px"> {{ match.team2.shortName }}</td>
-                                                        <td>{{ match.matchDateTime|time:"TIME_FORMAT" }}</td>
+                                                        <td>{{ match.matchDateTime|time:"H:i" }} LT</td>
                                                     </tr>
+                                                {% empty %}
+                                                    <td>No matches today</td>
                                                 {% endfor %}
                                             </tbody>
                                         </table>
@@ -53,10 +54,21 @@
                             </div>
                             <div class="col-xl-3 col-md-6">
                                 <div class="card bg-warning text-white mb-4">
-                                    <div class="card-body">Next Matchday</div>
+                                    <div class="card-body">Following Gameday {{ next_day_matches_date|date:"Y-M-d"}}</div>
                                     <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="#">View Details</a>
-                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                                        <table class="table">
+                                            <tbody>
+                                                {% for match in next_day_matches %}
+                                                    <tr>
+                                                        <td><img alt="team_ico" src="{{ match.team1.teamIconUrl }}" width="20px" height="20px"> {{ match.team1.shortName }}</td>
+                                                        <td><img alt="team_ico" src="{{ match.team2.teamIconUrl }}" width="20px" height="20px"> {{ match.team2.shortName }}</td>
+                                                        <td>{{ match.matchDateTime|time:"H:i" }} LT</td>
+                                                    </tr>
+                                                {% empty %}
+                                                    <td>No matches today</td>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
