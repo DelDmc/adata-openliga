@@ -24,7 +24,7 @@ class IndexView(ListView):
     def get_queryset(self):
         """
         Collects data of all matches for current season
-        for all BL leagues in sorted by date order
+        for all BL divisions in sorted by date order
         """
         queryset = []
         for league in self.leagues_shortcuts:
@@ -35,19 +35,17 @@ class IndexView(ListView):
         queryset.sort(key=self.sort_func)
         return queryset
 
-    def get_teams_stats(self):
-        teams_stats = {league: self.get_leagues_data(league, CURRENT_SEASON) for league in self.leagues_shortcuts}
-        return teams_stats
-
     def get_context_data(self, **kwargs):
         kwargs["teams_stats"] = self.get_teams_stats()
         kwargs["matches"] = self.get_queryset()
         kwargs["today_matches"] = self.get_today_matches(kwargs["matches"])
         kwargs["next_day_matches"] = self.get_next_day_matches(kwargs["matches"])
         kwargs["next_day_matches_date"] = self.get_next_gameday_date(kwargs["next_day_matches"])
-        # print(kwargs["next_day_matches"])
-        # print(kwargs["matches"][0])
         return kwargs
+
+    def get_teams_stats(self):
+        teams_stats = {league: self.get_leagues_data(league, CURRENT_SEASON) for league in self.leagues_shortcuts}
+        return teams_stats
 
     def get_leagues_data(self, league, season):
         r = requests.get(self.path_teams.format(league, season))
@@ -59,10 +57,7 @@ class IndexView(ListView):
 
     @staticmethod
     def get_today_matches(matches_data):
-        # DO NOT FORGET TO CHANGE TODAY VARIABLE!!!
         today_matches = []
-        # today = '2022-08-05T16:30:00'
-        # today = datetime.fromisoformat(today).date()
         for match in matches_data:
             if match["matchDateTime"].date() == TODAY:
                 today_matches.append(match)
@@ -83,3 +78,4 @@ class IndexView(ListView):
     @staticmethod
     def get_next_gameday_date(next_day_matches):
         return next_day_matches[0]["matchDateTime"]
+

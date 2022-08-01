@@ -25,7 +25,10 @@ SECRET_KEY = "django-insecure-5y0@fy+ty#h3p383_9mj(cn$wj^fy7suw75^j8nv7kw&jqh7u!
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '08a2-78-83-150-60.eu.ngrok.io',
+    '127.0.0.1',
+]
 
 
 # Application definition
@@ -40,6 +43,7 @@ INSTALLED_APPS = [
     "django_extensions",
     "openliga",
     "crispy_forms",
+    "mathfilters",
 ]
 
 MIDDLEWARE = [
@@ -78,12 +82,12 @@ WSGI_APPLICATION = "config.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
-}
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "db.sqlite3",
+#     }
+# }
 
 
 # Password validation
