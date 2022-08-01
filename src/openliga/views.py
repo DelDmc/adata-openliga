@@ -78,4 +78,3 @@ class IndexView(ListView):
     @staticmethod
     def get_next_gameday_date(next_day_matches):
         return next_day_matches[0]["matchDateTime"]
-
